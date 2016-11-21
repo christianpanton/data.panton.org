@@ -32,9 +32,9 @@ def main(slug):
             q = Timeline.query.filter(Timeline.config == slug)
             args = request.args.to_dict(flat=True)
             time_args = {}
-
+            
             for arg in args:
-                if arg in ["days", "hours", "seconds"]:
+                if arg in ["weeks", "days", "hours", "minutes", "seconds"]:
                     time_args[arg] = int(args[arg])
 
             if len(time_args):
