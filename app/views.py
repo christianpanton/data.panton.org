@@ -29,7 +29,20 @@ def main(slug):
                 val[el.key] = json.loads(el.value)
 
         elif c.model == "timeline":
-            tl = Timeline.query.filter(Timeline.config == slug).order_by(Timeline.timestamp).all()
+            q = Timeline.query.filter(Timeline.config == slug)
+            args = request.args.to_dict(flat=True)
+            time_args = {}
+
+            for arg in args:
+                if arg in ["days", "hours", "seconds"]:
+                    time_args[arg] = int(args[arg])
+
+            if len(time_args):
+                now = datetime.datetime.utcnow()
+                then = now - datetime.timedelta(**time_args)
+                q = q.filter(Timeline.timestamp > then)
+
+            tl = q.order_by(Timeline.timestamp).all()
             val = map(lambda el: el.info(), tl)
 
         elif c.model == "blob":
