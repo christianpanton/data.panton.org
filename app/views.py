@@ -35,7 +35,10 @@ def main(slug):
             
             for arg in args:
                 if arg in ["weeks", "days", "hours", "minutes", "seconds"]:
-                    time_args[arg] = int(args[arg])
+                    try:
+                        time_args[arg] = int(args[arg])
+                    except:
+                        abort(400)
 
             if len(time_args):
                 now = datetime.datetime.utcnow()
